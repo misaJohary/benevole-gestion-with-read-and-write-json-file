@@ -6,32 +6,29 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (context) => BenevoleNotifier(),
+    ),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => BenevoleNotifier(),
-        ),
-
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: HomePageTest(),
-        // home: GetStarted(),
-        // home: HomePage(),
-        routes: {
-          AddNewBenevoleTest.routeName: (ctx) => AddNewBenevoleTest(),
-        },
+    context.read<BenevoleNotifier>().readBenevoles();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: HomePageTest(),
+      // home: GetStarted(),
+      // home: HomePage(),
+      routes: {
+        AddNewBenevoleTest.routeName: (ctx) => AddNewBenevoleTest(),
+      },
     );
   }
 }

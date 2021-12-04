@@ -12,15 +12,23 @@ class AddNewBenevoleTest extends StatefulWidget {
 
 class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
   final _form = GlobalKey<FormState>();
-  Benevole newBenevole = Benevole(
-    id: DateTime.now().toString(),
-    name: '',
-    number: '',
-    email: '',
-    adresse: '',
-    profession: '',
-    availability: '',
-  );
+  // Benevole newBenevole = Benevole(
+  //   id: DateTime.now().toString(),
+  //   name: '',
+  //   number: '',
+  //   email: '',
+  //   adresse: '',
+  //   profession: '',
+  //   availability: '',
+  // );
+  BenevoleFile _benevole = BenevoleFile(
+      id: [],
+      name: [],
+      number: [],
+      email: [],
+      adresse: [],
+      profession: [],
+      availability: []);
 
   _saveForm() {
     _form.currentState.save();
@@ -28,7 +36,10 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
 
   @override
   Widget build(BuildContext context) {
-    final _benevole = Provider.of<BenevoleNotifier>(context, listen: false).readBenevoles();
+    // final _benevole = Provider.of<BenevoleNotifier>(context, listen: false).readBenevoles();
+    // context.read<BenevoleNotifier>().readBenevoles();
+    context.select(
+        (BenevoleNotifier controller) => controller.benevole != null? _benevole = controller.benevole : null);
 
     return Scaffold(
       appBar: AppBar(
@@ -45,8 +56,8 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
                 decoration: InputDecoration(labelText: 'Nom et Prénom : '),
                 textInputAction: TextInputAction.next,
                 onSaved: (value) {
-                  _benevole.id.append(DateTime.now().toString());
-                  _benevole.name.append(value);
+                  _benevole.id.add(DateTime.now().toString());
+                  _benevole.name.add(value);
                 },
               ),
               TextFormField(
@@ -54,7 +65,7 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.phone,
                 onSaved: (value) {
-                  _benevole.number.append(value);
+                  _benevole.number.add(value);
                 },
               ),
               TextFormField(
@@ -62,21 +73,21 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.emailAddress,
                 onSaved: (value) {
-                  _benevole.email.append(value);
+                  _benevole.email.add(value);
                 },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Adresse : '),
                 textInputAction: TextInputAction.next,
                 onSaved: (value) {
-                  _benevole.adresse.append(value);
+                  _benevole.adresse.add(value);
                 },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Profession : '),
                 textInputAction: TextInputAction.next,
                 onSaved: (value) {
-                  _benevole.profession.append(value);
+                  _benevole.profession.add(value);
                 },
               ),
               TextFormField(
@@ -90,13 +101,13 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) {
                   _saveForm();
-
-                  Provider.of<BenevoleNotifier>(context, listen: false)
-                      .writeUser(_benevole);
+                  context.read<BenevoleNotifier>().writeUser(_benevole);
+                  // Provider.of<BenevoleNotifier>(context, listen: false)
+                  //     .writeUser(_benevole);
                   // Navigator.of(context).pop();
                 },
                 onSaved: (value) {
-                  _benevole.availability.append(value);
+                  _benevole.availability.add(value);
                 },
               ),
               SizedBox(
@@ -105,8 +116,9 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
               RaisedButton(
                 onPressed: () {
                   _saveForm();
-                  Provider.of<BenevoleNotifier>(context, listen: false)
-                      .writeUser(_benevole);
+                  context.read<BenevoleNotifier>().writeUser(_benevole);
+                  // Provider.of<BenevoleNotifier>(context, listen: false)
+                  //     .writeUser(_benevole);
                   // Navigator.of(context).pop();
                 },
                 child: Text('Enregistrer'),
