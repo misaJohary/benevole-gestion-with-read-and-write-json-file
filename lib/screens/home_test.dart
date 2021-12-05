@@ -1,4 +1,5 @@
-import '../screens/new_benevole_test.dart';
+import './new_benevole_test.dart';
+import './detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/benevole.dart';
@@ -34,8 +35,8 @@ class _HomePageTestState extends State<HomePageTest> {
                     return Column(children: [
                       ListTile(
                         onTap: () {
-                          // Navigator.of(context).pushNamed(DetailScreen.routeName,
-                          //     arguments: _benevole.name[index]);
+                          Navigator.of(context).pushNamed(DetailScreen.routeName,
+                              arguments: controller.benevole.id[index]);
                         },
                         title: Text(controller.benevole.name[index]),
                         subtitle: Text(controller.benevole.number[index]),
@@ -59,12 +60,12 @@ class _HomePageTestState extends State<HomePageTest> {
 
 class Search extends SearchDelegate {
 
-
   // bool groupBy;
 
   // Search(this.groupBy);
 
   List result = [];
+  List numberSuggest = [];
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -104,7 +105,7 @@ class Search extends SearchDelegate {
                       //     arguments: result[index].id);
                     },
                     title: Text(result[index]),
-                    // subtitle: Text(result[index].number),
+                    subtitle: Text(numberSuggest[index]),
                   ),
                   Divider()
                 ]);
@@ -119,7 +120,6 @@ class Search extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     // show when someone searches for something
 
-    // final benevole = Provider.of<BenevoleNotifier>(context, listen: false);
     BenevoleFile _benevole = BenevoleFile(
       id: [],
       name: [],
@@ -131,14 +131,17 @@ class Search extends SearchDelegate {
 
     context.select(
         (BenevoleNotifier controller) => controller.benevole != null? _benevole = controller.benevole : null);
-
-
+ 
+    var result = _benevole.name.where((element) => element.contains(RegExp("$query", caseSensitive: false))).toList();
+    var index = [];
+    List idSuggest = [];
     
-    result = _benevole.name.where((element) => element.contains(RegExp("$query", caseSensitive: false))).toList();
-    // result = _benevole
-    //     .where((element) =>
-    //         element.name.contains(RegExp("$query", caseSensitive: false)))
-    //     .toList();
+
+    for(var i = 0; i<result.length; i++){
+      index.add(_benevole.name.indexWhere((element) => element == result[i]));
+      idSuggest.add(_benevole.id[index[i]]);
+      numberSuggest.add(_benevole.number[index[i]]);
+    }
 
     return query.isEmpty
         ? Container()
@@ -146,14 +149,14 @@ class Search extends SearchDelegate {
             itemCount: result.length,
             itemBuilder: (context, index) => ListTile(
               onTap: () {
-                // Navigator.of(context).pushNamed(
-                //   DetailScreen.routeName,
-                //     arguments: result[index].id
-                //     );
-                // showResults(context);
+                Navigator.of(context).pushNamed(
+                  DetailScreen.routeName,
+                    arguments: idSuggest[index]
+                    );
+                showResults(context);
               },
               title: Text(result[index]),
-              // subtitle: Text(result[index].number),
+              subtitle: Text(numberSuggest[index]),
             ),
           );
     // throw UnimplementedError();
