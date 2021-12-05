@@ -153,7 +153,7 @@ class Search extends SearchDelegate {
                   DetailScreen.routeName,
                     arguments: idSuggest[index]
                     );
-                showResults(context);
+                // showResults(context);
               },
               title: Text(result[index]),
               subtitle: Text(numberSuggest[index]),

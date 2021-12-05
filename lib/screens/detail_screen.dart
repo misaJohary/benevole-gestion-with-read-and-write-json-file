@@ -119,8 +119,9 @@ class DetailScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(child: Icon(Icons.delete_rounded), onPressed: (){
-        // benevoleProvider.deleteBenevole(args);
-        // Navigator.of(context).pop();
+        context.read<BenevoleNotifier>().deleteUser(args, _benevole);
+        Navigator.of(context).pop();
+
       }, splashColor: Colors.red)
     );
   }

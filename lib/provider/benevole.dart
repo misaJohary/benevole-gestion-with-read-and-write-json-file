@@ -107,6 +107,19 @@ class BenevoleNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  deleteUser(String idTarget, BenevoleFile currentData) async {
+    final index = currentData.id.indexWhere((element) => element == idTarget);
+    currentData.id.removeAt(index);
+    currentData.name.removeAt(index);
+    currentData.number.removeAt(index);
+    currentData.email.removeAt(index);
+    currentData.adresse.removeAt(index);
+    currentData.availability.removeAt(index);
+    currentData.profession.removeAt(index);
+    _benevole = await FileManager().writeJsonFile(currentData);
+    notifyListeners();
+  }
+
   // addNew(Benevole newBenevole) {
   //   // benevoles.insert(newBenevole);
   //   benevoles.add(newBenevole);
