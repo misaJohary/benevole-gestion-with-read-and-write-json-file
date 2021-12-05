@@ -18,6 +18,14 @@ class _HomePageTestState extends State<HomePageTest> {
       appBar: AppBar(
         title: Text('Liste des bénévoles'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showSearch(context: context, delegate: Search());
+            },
+            icon: Icon(Icons.search),
+          )
+        ],
       ),
       body: context
           .select((BenevoleNotifier controller) => controller.benevole != null
@@ -46,5 +54,108 @@ class _HomePageTestState extends State<HomePageTest> {
         },
       ),
     );
+  }
+}
+
+class Search extends SearchDelegate {
+
+
+  // bool groupBy;
+
+  // Search(this.groupBy);
+
+  List result = [];
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          query = "";
+        },
+        icon: Icon(Icons.clear),
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // leading icon on the left of the appBar
+    return IconButton(
+      onPressed: () {
+        close(context, null);
+      },
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return ListView.builder(
+      itemCount: result.length,
+      itemBuilder: (context, index) {
+        return Column(children: [
+                  ListTile(
+                    onTap: () {
+                      // Navigator.of(context).pushNamed(DetailScreen.routeName,
+                      //     arguments: result[index].id);
+                    },
+                    title: Text(result[index]),
+                    // subtitle: Text(result[index].number),
+                  ),
+                  Divider()
+                ]);
+        // return ListTile(
+        //   title: result[index].name,
+        //   subtitle: result[index].number,
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // show when someone searches for something
+
+    // final benevole = Provider.of<BenevoleNotifier>(context, listen: false);
+    BenevoleFile _benevole = BenevoleFile(
+      id: [],
+      name: [],
+      number: [],
+      email: [],
+      adresse: [],
+      profession: [],
+      availability: []);
+
+    context.select(
+        (BenevoleNotifier controller) => controller.benevole != null? _benevole = controller.benevole : null);
+
+
+    
+    result = _benevole.name.where((element) => element.contains(RegExp("$query", caseSensitive: false))).toList();
+    // result = _benevole
+    //     .where((element) =>
+    //         element.name.contains(RegExp("$query", caseSensitive: false)))
+    //     .toList();
+
+    return query.isEmpty
+        ? Container()
+        : ListView.builder(
+            itemCount: result.length,
+            itemBuilder: (context, index) => ListTile(
+              onTap: () {
+                // Navigator.of(context).pushNamed(
+                //   DetailScreen.routeName,
+                //     arguments: result[index].id
+                //     );
+                // showResults(context);
+              },
+              title: Text(result[index]),
+              // subtitle: Text(result[index].number),
+            ),
+          );
+    // throw UnimplementedError();
   }
 }

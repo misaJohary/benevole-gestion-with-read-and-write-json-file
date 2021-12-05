@@ -1,27 +1,5 @@
-// import 'dart:';
-
 import '../file_manager.dart';
 import 'package:flutter/material.dart';
-
-class Benevole {
-  final String id;
-  final String name;
-  final String number;
-  final String adresse;
-  final String email;
-  final String profession;
-  final String availability;
-
-  Benevole({
-    this.id,
-    this.name,
-    this.number,
-    this.adresse,
-    this.email,
-    this.profession,
-    this.availability,
-  });
-}
 
 class BenevoleFile {
   final List<String> id;

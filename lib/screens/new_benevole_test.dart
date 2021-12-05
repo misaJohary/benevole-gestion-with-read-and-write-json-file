@@ -36,11 +36,8 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
 
   @override
   Widget build(BuildContext context) {
-    // final _benevole = Provider.of<BenevoleNotifier>(context, listen: false).readBenevoles();
-    // context.read<BenevoleNotifier>().readBenevoles();
     context.select(
         (BenevoleNotifier controller) => controller.benevole != null? _benevole = controller.benevole : null);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Ajouter un nouveau membre'),
