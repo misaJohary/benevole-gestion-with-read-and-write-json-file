@@ -101,8 +101,11 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
                 },
               ),
               DropdownButtonFormField(
+                  // isDense: false,
+                  // menuMaxHeight: 100,
                   hint: Text('Disponibilité'),
                   value: _selectedDay,
+                  decoration: InputDecoration(),
                   onChanged: (value) {
                     setState(() {
                       _selectedDay = value;
@@ -115,26 +118,6 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
                             value: e,
                           ))
                       .toList()),
-              // TextFormField(
-              //   decoration: InputDecoration(
-              //       labelText: 'Disponibilité : ',
-              //       hintText: 'Lundi, mardi, ...',
-              //       hintStyle: TextStyle(
-              //           fontStyle: FontStyle.italic,
-              //           fontSize: 12,
-              //           color: Colors.grey.withOpacity(0.5))),
-              //   textInputAction: TextInputAction.done,
-              //   onFieldSubmitted: (_) {
-              //     _saveForm();
-              //     context.read<BenevoleNotifier>().writeUser(_benevole);
-              //     // Provider.of<BenevoleNotifier>(context, listen: false)
-              //     //     .writeUser(_benevole);
-              //     // Navigator.of(context).pop();
-              //   },
-              //   onSaved: (value) {
-              //     _benevole.availability.add(value);
-              //   },
-
               SizedBox(
                 height: 20,
               ),

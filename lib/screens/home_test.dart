@@ -2,6 +2,7 @@ import './new_benevole_test.dart';
 import './detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../provider/benevole.dart';
 
 class HomePageTest extends StatefulWidget {
@@ -22,6 +23,8 @@ class _HomePageTestState extends State<HomePageTest> {
     'Samedi',
     'Dimanche'
   ];
+
+  List<String> _selectedDay;
   BenevoleFile _benevole = BenevoleFile(
       id: [],
       name: [],
@@ -74,12 +77,33 @@ class _HomePageTestState extends State<HomePageTest> {
         title: Text('Liste des bénévoles'),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              showSearch(context: context, delegate: Search());
-            },
-            icon: Icon(Icons.search),
-          )
+          !_groupByAvaibility
+              ? IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) {
+                          return MultiSelectDialog(
+                            title: Text('Filtrer par disponibilité'),
+                            searchable: false,
+                            items:
+                                _day.map((e) => MultiSelectItem(e, e)).toList(),
+                            initialValue: _selectedDay,
+                            onConfirm: (value) {
+                              setState(() {
+                                _selectedDay = value;
+                              });
+                            },
+                          );
+                        });
+                  },
+                  icon: Icon(Icons.filter_list_alt))
+              : IconButton(
+                  onPressed: () {
+                    showSearch(context: context, delegate: Search());
+                  },
+                  icon: Icon(Icons.search),
+                )
         ],
       ),
       drawer: SafeArea(
@@ -113,9 +137,7 @@ class _HomePageTestState extends State<HomePageTest> {
                       top: 5,
                       right: 5,
                       child: IconButton(
-                        onPressed: () {
-
-                        },
+                        onPressed: () {},
                         icon: Icon(
                           Icons.info_outline,
                           color: Colors.white,
@@ -126,16 +148,22 @@ class _HomePageTestState extends State<HomePageTest> {
                   ],
                 ),
               ),
-              SwitchListTile(title: Text('Grouper par disponibilité'),value: _groupByAvaibility, onChanged: (value){
-                setState(() {
-                  _groupByAvaibility = value;
-                });
-              }),
-              SwitchListTile(title: Text('Afficher tout les jours'), value: _showEmpty, onChanged: (value){
-                setState(() {
-                  _showEmpty = value;
-                });
-              }),
+              SwitchListTile(
+                  title: Text('Grouper par disponibilité'),
+                  value: _groupByAvaibility,
+                  onChanged: (value) {
+                    setState(() {
+                      _groupByAvaibility = value;
+                    });
+                  }),
+              SwitchListTile(
+                  title: Text('Afficher tout les jours'),
+                  value: _showEmpty,
+                  onChanged: (value) {
+                    setState(() {
+                      _showEmpty = value;
+                    });
+                  }),
             ],
           ),
         ),
