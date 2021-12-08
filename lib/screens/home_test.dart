@@ -11,7 +11,7 @@ class HomePageTest extends StatefulWidget {
 }
 
 class _HomePageTestState extends State<HomePageTest> {
-  bool _groupByAvaibility = true;
+  bool _groupByAvaibility = false;
   bool _showEmpty = false;
   final List<String> _day = [
     'Lundi',
@@ -81,6 +81,64 @@ class _HomePageTestState extends State<HomePageTest> {
             icon: Icon(Icons.search),
           )
         ],
+      ),
+      drawer: SafeArea(
+        child: Drawer(
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                height: 150,
+                decoration:
+                    BoxDecoration(color: Theme.of(context).primaryColor),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: 50,
+                      bottom: 20,
+                      width: 200,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text('Bienvenue',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline4
+                                .copyWith(color: Colors.white),
+                            softWrap: true,
+                            overflow: TextOverflow.clip),
+                      ),
+                    ),
+                    Positioned(
+                      top: 5,
+                      right: 5,
+                      child: IconButton(
+                        onPressed: () {
+
+                        },
+                        icon: Icon(
+                          Icons.info_outline,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SwitchListTile(title: Text('Grouper par disponibilité'),value: _groupByAvaibility, onChanged: (value){
+                setState(() {
+                  _groupByAvaibility = value;
+                });
+              }),
+              SwitchListTile(title: Text('Afficher tout les jours'), value: _showEmpty, onChanged: (value){
+                setState(() {
+                  _showEmpty = value;
+                });
+              }),
+            ],
+          ),
+        ),
       ),
       body: context.select((BenevoleNotifier controller) => controller
                   .benevole !=
