@@ -24,7 +24,15 @@ class _HomePageTestState extends State<HomePageTest> {
     'Dimanche'
   ];
 
-  List<String> _selectedDay;
+  List<String> _selectedDay = [
+    'Lundi',
+    'Mardi',
+    'Mercredi',
+    'Jeudi',
+    'Vendredi',
+    'Samedi',
+    'Dimanche'
+  ];
   BenevoleFile _benevole = BenevoleFile(
       id: [],
       name: [],
@@ -62,28 +70,36 @@ class _HomePageTestState extends State<HomePageTest> {
       ),
     ).toList();
 
-    List _days = [
-      benTemp.where((element) => element.availability == 'Lundi').toList(),
-      benTemp.where((element) => element.availability == 'Mardi').toList(),
-      benTemp.where((element) => element.availability == 'Mercredi').toList(),
-      benTemp.where((element) => element.availability == 'Jeudi').toList(),
-      benTemp.where((element) => element.availability == 'Vendredi').toList(),
-      benTemp.where((element) => element.availability == 'Samedi').toList(),
-      benTemp.where((element) => element.availability == 'Dimanche').toList(),
-    ];
+    List _days = List.generate(
+      _selectedDay.length,
+      (index) => benTemp
+          .where((element) => element.availability == _selectedDay[index])
+          .toList(),
+    );
+
+    // List _days = [
+    //   benTemp.where((element) => element.availability == 'Lundi').toList(),
+    //   benTemp.where((element) => element.availability == 'Mardi').toList(),
+    //   benTemp.where((element) => element.availability == 'Mercredi').toList(),
+    //   benTemp.where((element) => element.availability == 'Jeudi').toList(),
+    //   benTemp.where((element) => element.availability == 'Vendredi').toList(),
+    //   benTemp.where((element) => element.availability == 'Samedi').toList(),
+    //   benTemp.where((element) => element.availability == 'Dimanche').toList(),
+    // ];
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Liste des bénévoles'),
         centerTitle: true,
         actions: [
-          !_groupByAvaibility
+          _groupByAvaibility
               ? IconButton(
                   onPressed: () {
                     showDialog(
                         context: context,
                         builder: (_) {
                           return MultiSelectDialog(
+                            height: MediaQuery.of(context).size.height * (0.6),
                             title: Text('Filtrer par disponibilité'),
                             searchable: false,
                             items:
@@ -190,7 +206,7 @@ class _HomePageTestState extends State<HomePageTest> {
                                           child: Container(
                                             child: Center(
                                               child: Text(
-                                                _day[i],
+                                                _selectedDay[i],
                                                 overflow: TextOverflow.fade,
                                                 softWrap: false,
                                                 style: Theme.of(context)
