@@ -20,7 +20,10 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
   //   adresse: '',
   //   profession: '',
   //   availability: '',
+
   // );
+
+  String _selectedDay;
   BenevoleFile _benevole = BenevoleFile(
       id: [],
       name: [],
@@ -34,10 +37,20 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
     _form.currentState.save();
   }
 
+  List<String> _day = [
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+    "Dimanche"
+  ];
+
   @override
   Widget build(BuildContext context) {
-    context.select(
-        (BenevoleNotifier controller) => controller.benevole != null? _benevole = controller.benevole : null);
+    context.select((BenevoleNotifier controller) =>
+        controller.benevole != null ? _benevole = controller.benevole : null);
     return Scaffold(
       appBar: AppBar(
         title: Text('Ajouter un nouveau membre'),
@@ -87,26 +100,41 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
                   _benevole.profession.add(value);
                 },
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                    labelText: 'Disponibilité : ',
-                    hintText: 'Lundi, mardi, ...',
-                    hintStyle: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontSize: 12,
-                        color: Colors.grey.withOpacity(0.5))),
-                textInputAction: TextInputAction.done,
-                onFieldSubmitted: (_) {
-                  _saveForm();
-                  context.read<BenevoleNotifier>().writeUser(_benevole);
-                  // Provider.of<BenevoleNotifier>(context, listen: false)
-                  //     .writeUser(_benevole);
-                  // Navigator.of(context).pop();
-                },
-                onSaved: (value) {
-                  _benevole.availability.add(value);
-                },
-              ),
+              DropdownButtonFormField(
+                  hint: Text('Disponibilité'),
+                  value: _selectedDay,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedDay = value;
+                      _benevole.availability.add(value);
+                    });
+                  },
+                  items: _day
+                      .map((e) => DropdownMenuItem(
+                            child: Text(e),
+                            value: e,
+                          ))
+                      .toList()),
+              // TextFormField(
+              //   decoration: InputDecoration(
+              //       labelText: 'Disponibilité : ',
+              //       hintText: 'Lundi, mardi, ...',
+              //       hintStyle: TextStyle(
+              //           fontStyle: FontStyle.italic,
+              //           fontSize: 12,
+              //           color: Colors.grey.withOpacity(0.5))),
+              //   textInputAction: TextInputAction.done,
+              //   onFieldSubmitted: (_) {
+              //     _saveForm();
+              //     context.read<BenevoleNotifier>().writeUser(_benevole);
+              //     // Provider.of<BenevoleNotifier>(context, listen: false)
+              //     //     .writeUser(_benevole);
+              //     // Navigator.of(context).pop();
+              //   },
+              //   onSaved: (value) {
+              //     _benevole.availability.add(value);
+              //   },
+
               SizedBox(
                 height: 20,
               ),
