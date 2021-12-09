@@ -15,8 +15,8 @@ class HomePageTest extends StatefulWidget {
 }
 
 class _HomePageTestState extends State<HomePageTest> {
-  bool _groupByAvaibility = false;
-  bool _showEmpty = false;
+  // bool Data.groupByAvaibility = false;
+  // bool Data.showEmpty = false;
 
   List<String> _day = Data.day;
 
@@ -47,7 +47,7 @@ class _HomePageTestState extends State<HomePageTest> {
         title: Text('Liste des bénévoles'),
         centerTitle: true,
         actions: [
-          _groupByAvaibility
+          Data.groupByAvaibility
               ? IconButton(
                   onPressed: () {
                     showDialog(
@@ -121,18 +121,18 @@ class _HomePageTestState extends State<HomePageTest> {
               ),
               SwitchListTile(
                   title: Text('Grouper par disponibilité'),
-                  value: _groupByAvaibility,
+                  value: Data.groupByAvaibility,
                   onChanged: (value) {
                     setState(() {
-                      _groupByAvaibility = value;
+                      Data.groupByAvaibility = value;
                     });
                   }),
               SwitchListTile(
                   title: Text('Afficher tout les jours'),
-                  value: _showEmpty,
+                  value: Data.showEmpty,
                   onChanged: (value) {
                     setState(() {
-                      _showEmpty = value;
+                      Data.showEmpty = value;
                     });
                   }),
             ],
@@ -142,16 +142,11 @@ class _HomePageTestState extends State<HomePageTest> {
       body: context.select((BenevoleNotifier controller) => controller
                   .benevole !=
               null
-          ? _groupByAvaibility
-              ? ListWithAvailability(days: _days, showEmpty: _showEmpty, selectedDay: _selectedDay, color: _color)
+          ? Data.groupByAvaibility
+              ? ListWithAvailability(days: _days, showEmpty: Data.showEmpty, selectedDay: _selectedDay, color: _color)
               : ListWithoutAvailability(controller.benevole)
           : NothingToPrint()),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).pushNamed(AddNewBenevoleTest.routeName);
-        },
-      ),
+      floatingActionButton: FloatingAddActionButton(),
     );
   }
 
@@ -167,6 +162,22 @@ class _HomePageTestState extends State<HomePageTest> {
       profession: _benevole.profession[index],
     ),
   );
+  }
+}
+
+class FloatingAddActionButton extends StatelessWidget {
+  const FloatingAddActionButton({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: () {
+        Navigator.of(context).pushNamed(AddNewBenevoleTest.routeName);
+      },
+    );
   }
 }
 
@@ -223,10 +234,9 @@ class ListWithAvailability extends StatelessWidget {
     @required bool showEmpty,
     @required List<String> selectedDay,
     @required List<MaterialColor> color,
-  }) : _days = days, _showEmpty = showEmpty, _selectedDay = selectedDay, _color = color, super(key: key);
+  }) : _days = days, _selectedDay = selectedDay, _color = color, super(key: key);
 
   final List _days;
-  final bool _showEmpty;
   final List<String> _selectedDay;
   final List<MaterialColor> _color;
 
@@ -237,7 +247,7 @@ class ListWithAvailability extends StatelessWidget {
             children: List.generate(
           _days.length,
           (i) => _days[i].length == 0
-              ? _showEmpty
+              ? Data.showEmpty
                   ? Container(
                       margin: EdgeInsets.all(10),
                       height: 70,

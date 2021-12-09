@@ -41,4 +41,7 @@ class Data {
     profession: [],
     availability: [],
   );
+
+  static bool groupByAvaibility = false;
+  static bool showEmpty = false;
 }
