@@ -1,3 +1,4 @@
+// import 'package:downgrade/screens/edit_screen.dart';
 import 'package:downgrade/widgets/info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -121,7 +122,6 @@ class DetailScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(child: Icon(Icons.delete_rounded), onPressed: (){
         context.read<BenevoleNotifier>().deleteUser(args, _benevole);
         Navigator.of(context).pop();
-
       }, splashColor: Colors.red)
     );
   }
