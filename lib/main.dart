@@ -1,38 +1,23 @@
-import './provider/benevole.dart';
-// import 'package:benevolat/provider/file_controller.dart';
-import './screens/new_benevole_test.dart';
-import './screens/home_test.dart';
-// import './screens/edit_screen.dart';
-import './screens/detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import './screens/note_list.dart';
+import './screens/note_detail.dart';
 
 void main() {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (context) => BenevoleNotifier(),
-    ),
-  ], child: MyApp()));
+	runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  @override
+
+	@override
   Widget build(BuildContext context) {
-    context.read<BenevoleNotifier>().readBenevoles();
+
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePageTest(),
-      // home: GetStarted(),
-      // home: HomePage(),
-      routes: {
-        AddNewBenevoleTest.routeName: (ctx) => AddNewBenevoleTest(),
-        DetailScreen.routeName: (ctx) => DetailScreen(),
-        // EditScreen.routeName: (ctx) => EditScreen(),
-      },
+	    title: 'NoteKeeper',
+	    debugShowCheckedModeBanner: false,
+	    theme: ThemeData(
+		    primarySwatch: Colors.deepPurple
+	    ),
+	    home: NoteList(),
     );
   }
 }
