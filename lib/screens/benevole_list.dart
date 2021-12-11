@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:downgrade/screens/detail_screen.dart';
 import 'package:downgrade/screens/new_benevole_test.dart';
 import 'package:flutter/material.dart';
 import '../models/benevole.dart';
@@ -6,166 +7,111 @@ import '../utils/database_helper.dart';
 // import '../screens/note_detail.dart';
 import 'package:sqflite/sqflite.dart';
 
-
 class BenevoleList extends StatefulWidget {
-
-	@override
+  @override
   State<StatefulWidget> createState() {
-
     return BenevoleListState();
   }
 }
 
 class BenevoleListState extends State<BenevoleList> {
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  List<Benevole> benevoleList;
+  int count = 0;
 
-	DatabaseHelper databaseHelper = DatabaseHelper();
-	List<Benevole> benevoleList;
-	int count = 0;
-
-	@override
+  @override
   Widget build(BuildContext context) {
-
-		if (benevoleList == null) {
-			benevoleList = List<Benevole>();
-			updateListView();
-		}
+    if (benevoleList == null) {
+      benevoleList = List<Benevole>();
+      updateListView();
+    }
 
     return Scaffold(
-
-	    appBar: AppBar(
-		    title: Text('Benevoles'),
-	    ),
-
-	    body: getNoteListView(),
-
-	    floatingActionButton: FloatingActionButton(
-		    onPressed: () {
-		      // debugPrint('FAB clicked');
-		      navigateToDetail(Benevole('', '', '', '', '', ''), 'Add Benevole');
-		    },
-
-		    tooltip: 'Add Benevole',
-
-		    child: Icon(Icons.add),
-
-	    ),
+      appBar: AppBar(
+        title: Text('Benevoles'),
+      ),
+      body: getNoteListView(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // debugPrint('FAB clicked');
+          navigateToAdd(Benevole('', '', '', '', '', ''), 'Add Benevole');
+        },
+        tooltip: 'Add Benevole',
+        child: Icon(Icons.add),
+      ),
     );
   }
 
   ListView getNoteListView() {
+    TextStyle titleStyle = Theme.of(context).textTheme.caption;
 
-		TextStyle titleStyle = Theme.of(context).textTheme.caption;
+    return ListView.builder(
+      itemCount: count,
+      itemBuilder: (BuildContext context, int position) {
+        return Column(
+          children: [
+            ListTile(
+              // leading: CircleAvatar(
+              // 	backgroundColor: getPriorityColor(this.benevoleList[position].priority),
+              // 	child: getPriorityIcon(this.benevoleList[position].priority),
+              // ),
 
-		return ListView.builder(
-			itemCount: count,
-			itemBuilder: (BuildContext context, int position) {
-				return Card(
-					color: Colors.white,
-					elevation: 2.0,
-					child: ListTile(
+              title: Text(
+                this.benevoleList[position].name,
+              ),
 
-						// leading: CircleAvatar(
-						// 	backgroundColor: getPriorityColor(this.benevoleList[position].priority),
-						// 	child: getPriorityIcon(this.benevoleList[position].priority),
-						// ),
+              subtitle: Text(
+                this.benevoleList[position].number,
+                style: titleStyle,
+              ),
 
-						title: Text(this.benevoleList[position].name,),
+              trailing: Icon(Icons.arrow_forward_ios_rounded,
+                  size: 18, color: Colors.grey),
 
-						subtitle: Text(this.benevoleList[position].number, style: titleStyle,),
-
-						trailing: GestureDetector(
-							child: Icon(Icons.delete, color: Colors.grey,),
-							onTap: () {
-								_delete(context, benevoleList[position]);
-							},
-						),
-
-
-						onTap: () {
-							debugPrint("ListTile Tapped");
-							navigateToDetail(this.benevoleList[position],'Edit Benevole');
-						},
-
-					),
-				);
-			},
-		);
+              onTap: () {
+                debugPrint("ListTile Tapped");
+                navigateToDetail(this.benevoleList[position]);
+              },
+            ),
+            Divider()
+          ],
+        );
+      },
+    );
   }
 
-  // Returns the priority color
-	// Color getPriorityColor(int priority) {
-	// 	switch (priority) {
-	// 		case 1:
-	// 			return Colors.red;
-	// 			break;
-	// 		case 2:
-	// 			return Colors.yellow;
-	// 			break;
+  void navigateToAdd(Benevole benevole, String title) async {
+    bool result =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return AddNewBenevoleTest(benevole, title);
+    }));
 
-	// 		default:
-	// 			return Colors.yellow;
-	// 	}
-	// }
+    if (result == true) {
+      updateListView();
+    }
+  }
 
-	// Returns the priority icon
-	// Icon getPriorityIcon(int priority) {
-	// 	switch (priority) {
-	// 		case 1:
-	// 			return Icon(Icons.play_arrow);
-	// 			break;
-	// 		case 2:
-	// 			return Icon(Icons.keyboard_arrow_right);
-	// 			break;
+  void navigateToDetail(Benevole benevole) async{
+    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return DetailScreen(benevole);
+    }));
 
-	// 		default:
-	// 			return Icon(Icons.keyboard_arrow_right);
-	// 	}
-	// }
-
-	void _delete(BuildContext context, Benevole benevole) async {
-
-		int result = await databaseHelper.deleteBenevole(benevole.id);
-		if (result != 0) {
-			_showSnackBar(context, 'Benevole Deleted Successfully');
-			updateListView();
-		}
-	}
-
-	void _showSnackBar(BuildContext context, String message) {
-
-		final snackBar = SnackBar(content: Text(message));
-		Scaffold.of(context).showSnackBar(snackBar);
-	}
-
-  void navigateToDetail(Benevole benevole, String title) async {
-	  bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-		  return AddNewBenevoleTest(benevole, title);
-	  }));
-
-	  if (result == true) {
-	  	updateListView();
-	  }
+    if (result == true){
+      updateListView();
+    }
   }
 
   void updateListView() {
-
-		final Future<Database> dbFuture = databaseHelper.initializeDatabase();
-		dbFuture.then((database) {
-
-			Future<List<Benevole>> benevoleListFuture = databaseHelper.getBenevoleList();
-			benevoleListFuture.then((benevoleList) {
-				setState(() {
-				  this.benevoleList = benevoleList;
-				  this.count = benevoleList.length;
-				});
-			});
-		});
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<Benevole>> benevoleListFuture =
+          databaseHelper.getBenevoleList();
+      benevoleListFuture.then((benevoleList) {
+        setState(() {
+          this.benevoleList = benevoleList;
+          this.count = benevoleList.length;
+        });
+      });
+    });
   }
 }
-
-
-
-
-
-
-
