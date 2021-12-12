@@ -20,25 +20,6 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final String args = ModalRoute.of(context).settings.arguments;
-
-    // BenevoleFile _benevole = BenevoleFile(
-    //   id: [],
-    //   name: [],
-    //   number: [],
-    //   email: [],
-    //   adresse: [],
-    //   profession: [],
-    //   availability: []);
-
-    // Benevole benevoleSelected
-
-    // context.select(
-    //     (BenevoleNotifier controller) => controller.benevole != null? _benevole = controller.benevole : null);
-    //     final indexSelected = _benevole.id.indexWhere((id) => id == args);
-
-    // final Benevole benevoleSelected =
-    //     benevoleData.firstWhere((element) => element.id == args);
 
     return WillPopScope(
       onWillPop: (){

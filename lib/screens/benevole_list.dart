@@ -29,6 +29,14 @@ class BenevoleListState extends State<BenevoleList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Benevoles'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showSearch(context: context, delegate: Search(benevoleList));
+            },
+            icon: Icon(Icons.search),
+          )
+        ],
       ),
       body: getNoteListView(),
       floatingActionButton: FloatingActionButton(
@@ -91,12 +99,13 @@ class BenevoleListState extends State<BenevoleList> {
     }
   }
 
-  void navigateToDetail(Benevole benevole) async{
-    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+  void navigateToDetail(Benevole benevole) async {
+    bool result =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return DetailScreen(benevole);
     }));
 
-    if (result == true){
+    if (result == true) {
       updateListView();
     }
   }
@@ -113,5 +122,86 @@ class BenevoleListState extends State<BenevoleList> {
         });
       });
     });
+  }
+}
+
+class Search extends SearchDelegate {
+  List<Benevole> benevoles;
+
+  Search(this.benevoles);
+
+  var result;
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    // throw UnimplementedError();
+    return [
+      IconButton(
+          onPressed: () {
+            query = '';
+          },
+          icon: Icon(Icons.clear))
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    return IconButton(
+      onPressed: () {
+        close(context, null);
+      },
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+    );
+    // throw UnimplementedError();
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    return query.isEmpty
+        ? Container()
+        : ListView.builder(
+            itemCount: result.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(result[index].name),
+                subtitle: Text(result[index].number),
+              );
+            },
+          );
+
+    // throw UnimplementedError();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    result = benevoles
+        .where(
+          (element) => element.name.contains(
+            RegExp(
+              '$query',
+              caseSensitive: false,
+            ),
+          ),
+        )
+        .toList();
+
+    return query.isEmpty
+        ? Container()
+        : ListView.builder(
+            itemCount: result.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(result[index].name),
+                subtitle: Text(result[index].number),
+              );
+            });
+// throw UnimplementedError();
   }
 }
