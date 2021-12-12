@@ -32,7 +32,7 @@ class BenevoleListState extends State<BenevoleList> {
         actions: [
           IconButton(
             onPressed: () {
-              showSearch(context: context, delegate: Search(benevoleList));
+              showSearch(context: context, delegate: Search(benevoleList, navigateToDetail));
             },
             icon: Icon(Icons.search),
           )
@@ -127,8 +127,9 @@ class BenevoleListState extends State<BenevoleList> {
 
 class Search extends SearchDelegate {
   List<Benevole> benevoles;
+  Function navigateToDetail;
 
-  Search(this.benevoles);
+  Search(this.benevoles, this.navigateToDetail);
 
   var result;
 
@@ -200,6 +201,9 @@ class Search extends SearchDelegate {
               return ListTile(
                 title: Text(result[index].name),
                 subtitle: Text(result[index].number),
+                onTap: (){
+                  navigateToDetail(result[index]);
+                },
               );
             });
 // throw UnimplementedError();

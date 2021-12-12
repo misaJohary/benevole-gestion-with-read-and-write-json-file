@@ -8,10 +8,11 @@ class AddNewBenevoleTest extends StatefulWidget {
   final String appBarTitle;
 	final Benevole benevole;
 
-	AddNewBenevoleTest(this. benevole, this.appBarTitle);
+	AddNewBenevoleTest(this.benevole, this.appBarTitle);
 
   @override
-  _AddNewBenevoleTestState createState() => _AddNewBenevoleTestState(this.benevole, this.appBarTitle);
+  _AddNewBenevoleTestState createState() => _AddNewBenevoleTestState();
+  // _AddNewBenevoleTestState createState() => _AddNewBenevoleTestState(this.benevole, this.appBarTitle);
 }
 
 class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
@@ -19,11 +20,20 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
 
   DatabaseHelper helper = DatabaseHelper();
 
-  String appBarTitle;
-	Benevole benevole;
-   String _selectedDay;
+  // String appBarTitle;
+	// Benevole benevole;
 
-  _AddNewBenevoleTestState(Benevole benevole, String appBarTitle);
+  // _AddNewBenevoleTestState(Benevole benevole, String appBarTitle);
+
+
+  String _selectedDay;
+
+  @override
+  void initState () {
+    if(widget.benevole.availability != '')
+    _selectedDay = widget.benevole.availability;
+    super.initState();
+  }
 
   // _saveForm() {
   //   _form.currentState.save();
@@ -190,24 +200,24 @@ class _AddNewBenevoleTestState extends State<AddNewBenevoleTest> {
 		);
 	}
 
-  	void _delete() async {
+  // 	void _delete() async {
 
-		moveToLastScreen();
+	// 	moveToLastScreen();
 
-		// Case 1: If user is trying to delete the NEW NOTE i.e. he has come to
-		// the detail page by pressing the FAB of NoteList page.
-		if (benevole.id == null) {
-			_showAlertDialog('Status', 'No Benevole was deleted');
-			return;
-		}
+	// 	// Case 1: If user is trying to delete the NEW NOTE i.e. he has come to
+	// 	// the detail page by pressing the FAB of NoteList page.
+	// 	if (benevole.id == null) {
+	// 		_showAlertDialog('Status', 'No Benevole was deleted');
+	// 		return;
+	// 	}
 
-		// Case 2: User is trying to delete the old benevole that already has a valid ID.
-		int result = await helper.deleteBenevole(benevole.id);
-		if (result != 0) {
-			_showAlertDialog('Status', 'Benevole Deleted Successfully');
-		} else {
-			_showAlertDialog('Status', 'Error Occured while Deleting Benevole');
-		}
-	}
+	// 	// Case 2: User is trying to delete the old benevole that already has a valid ID.
+	// 	int result = await helper.deleteBenevole(benevole.id);
+	// 	if (result != 0) {
+	// 		_showAlertDialog('Status', 'Benevole Deleted Successfully');
+	// 	} else {
+	// 		_showAlertDialog('Status', 'Error Occured while Deleting Benevole');
+	// 	}
+	// }
 
 }
